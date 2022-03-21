@@ -144,30 +144,3 @@ def append_rating_to_movie_table(rating_dict, file_dir):
 file_dir = csv_files_folder+'/'+"copy_movie.csv"
 append_rating_to_movie_table(ratings, file_dir)
 '''
-
-def specify_each_vote(file_dir):
-    read_file = pd.read_csv(file_dir)
-    two_columns = read_file.iloc[:, [1,2]]
-
-    rating_dict = {}
-
-    for index, row in two_columns.iterrows():
-        movie_id = row[0]
-        rating = row[1]
-
-        if movie_id in rating_dict:
-            rating = round(rating)
-            list_votes = rating_dict[movie_id]
-            list_votes[rating] += 1
-            rating_dict[movie_id] = list_votes
-        else:
-            rating = round(rating)
-            list_votes_value = [0,0,0,0,0,0]
-            list_votes_value[rating] = 1
-            rating_dict[movie_id] = list_votes_value
-
-    return rating_dict
-
-file_dir = csv_files_folder+'/'+"ratings.csv"
-
-ratings_list = specify_each_vote(file_dir)

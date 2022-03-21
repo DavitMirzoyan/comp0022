@@ -12,17 +12,19 @@
 
         if($movie_name !== ""){
             $get_movieId = "SELECT movieId FROM database.movies WHERE title LIKE BINARY '$movie_name '";
+            
             $movieId = -1;
             
-            $result =$mysqli->query($get_movieId);
+            $result = $mysqli->query($get_movieId);
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $movieId = $row["movieId"];
+                    $movieId = (int) $row["movieId"];
+            
                 }
             } else {
                 echo "0 results";
             }
-
+            
             $personality_types = array("openness", "agreeableness", "emotional_stability", "conscientiousness", "extraversion");
             $rating_types = array(4, 4.5, 5);
             $trained_data = array('4' => "", '4.5'=> "", '5' => "");
@@ -35,7 +37,7 @@
                                  FROM $two_tables 
                                  WHERE ratings_hashed.movieId = $movieId";
 
-                
+            echo $total_rows_query;
             //$total_rows = mysqli_num_rows($mysqli->query($total_rows_query));
             //echo $total_rows;
             $total_rows = mysqli_fetch_row($mysqli->query($total_rows_query))[0];

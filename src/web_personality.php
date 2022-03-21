@@ -24,7 +24,7 @@
     <input type="submit" value="Submit" name="button1">
     <br><br>
 
-    <input type="text" placeholder="Tags" id="tags" name="tags">  
+    <input type="text" placeholder="Set of Movie Titles" id="tags" name="tags">  
     <br><br>
     
     <input type="submit" value="Submit" name="button2">

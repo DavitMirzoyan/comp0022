@@ -1,4 +1,6 @@
 <?php
+    include "Cache.php";
+
     $mysqli = new mysqli("db", "root", "password", "database");
 
     if ($mysqli->connect_error) {
@@ -134,18 +136,23 @@
         </tr>
         ";
     
-    $query_each_rating= "SELECT rating, Count(rating) as Total FROM database.ratings WHERE movieId = $movieId GROUP BY rating ORDER BY rating DESC ";
+    $query_each_rating= "SELECT rating, Count(rating) as Total
+                         FROM database.ratings WHERE movieId = $movieId GROUP BY rating ORDER BY rating DESC ";
     $result = $mysqli->query($query_each_rating);
+    $returned_result = check_cache($query_each_rating, $result);
 
-    $query_column_length= "SELECT Sum(Total) as Total_Sum FROM (SELECT Count(rating) as Total FROM database.ratings WHERE movieId = $movieId GROUP BY rating) as Total_Sum";
+    $query_column_length = "SELECT Count(rating) as Total_Sum FROM database.ratings WHERE movieId = $movieId";
     $length_result = $mysqli->query($query_column_length);
-    $row = $length_result->fetch_assoc();
-    $length = $row["Total_Sum"];
+    $length_result = check_cache($query_column_length, $length_result);
+    $length = $length_result[0];
 
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $perecntage = round($row["Total"]/$length * 100, 2);
-            echo "<tr>", "<td align='center'>" . $row['rating'] . "</td>", "<td align='center'>" .$row["Total"]. "</td>", "<td align='center'>" .$perecntage. "%</td>","</tr>";
+    if (count($returned_result) > 0) {
+        for ($i = 0; $i < count($returned_result); $i+=2)  {
+            $rating = $returned_result[$i];
+            $total = $returned_result[$i+1];
+    
+            $perecntage = round($total/$length * 100, 2);
+            echo "<tr>", "<td align='center'> " . $rating . "</td>", "<td align='center'>" .$total. "</td>", "<td align='center'>" .$perecntage. "%</td>","</tr>";
         }
     } else {
         echo "<tr>", "<td align='center'> " . "no ratings" . "</td>", "<td align='center'>" ."0". "</td>", "<td align='center'>" ."0". "%</td>","</tr>";
@@ -164,16 +171,21 @@
 
     $query_tags= "SELECT tag, Count(tag) as Total FROM database.tags WHERE movieId = $movieId GROUP BY tag";
     $result =$mysqli->query($query_tags);
+    $returned_result = check_cache($query_tags, $result);
 
-    $query_column_length= "SELECT Sum(Total) as Total_Sum FROM (SELECT Count(tag) as Total FROM database.tags WHERE movieId = $movieId GROUP BY tag) as Total_Sum";
+    $query_column_length = "SELECT Count(tag) as Total_Sum FROM database.tags WHERE movieId = $movieId";
     $length_result = $mysqli->query($query_column_length);
-    $row = $length_result->fetch_assoc();
-    $length = $row["Total_Sum"];
+    $length_result = check_cache($query_column_length, $length_result);
+    $length = $length_result[0];
 
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $perecntage = round($row["Total"]/$length * 100, 2);
-            echo "<tr>", "<td align='center'> " . $row['tag'] . "</td>", "<td align='center'>" .$row["Total"]. "</td>", "<td align='center'>" .$perecntage. "%</td>","</tr>";
+
+    if (count($returned_result) > 0) {
+        for ($i = 0; $i < count($returned_result); $i+=2)  {
+            $tag = $returned_result[$i];
+            $total = $returned_result[$i+1];
+    
+            $perecntage = round($total/$length * 100, 2);
+            echo "<tr>", "<td align='center'> " . $tag . "</td>", "<td align='center'>" .$total. "</td>", "<td align='center'>" .$perecntage. "%</td>","</tr>";
         }
     } else {
         echo "<tr>", "<td align='center'> " . "no tags" . "</td>", "<td align='center'>" ."0". "</td>", "<td align='center'>" ."0". "%</td>","</tr>";
@@ -182,4 +194,5 @@
             
     echo "</table>
             <br><br>";
+
 ?>

@@ -38,6 +38,9 @@
 	</header>
 
 	<section>
+	
+		<a href="index.php"> Index Page</a> 
+		
 		<h1 style="text-align:center;">
 			<a href="web_personality.php"> Personality</a> 
 		</h1>

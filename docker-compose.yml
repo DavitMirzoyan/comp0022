@@ -1,72 +1,55 @@
-version: "3.8"
-
+version: '3.1'
 services:
-    php-apache-environment:
-        container_name: php-apache
-        build:
-            context: .
-            dockerfile: Dockerfile
-        depends_on: 
-            - db
-        volumes:
-            - ./src:/var/www/html/
-        ports: 
-            - 8000:80
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "80"
+    depends_on: 
+      - db
+      - userdb
+    volumes:
+      - ./src:/var/www/html/
+    env_file: env_vars/webapp_env_vars.env
 
-    memcached:
-        image: bitnami/memcached:latest
-        environment:
-            - MEMCACHED_USERNAME=my_user
-            - MEMCACHED_PASSWORD=my_password
-            - MEMCACHED_CACHE_SIZE=128
-            - MEMCACHED_MAX_CONNECTIONS=2000
-            - MEMCACHED_THREADS=4
-            - MEMCACHED_MAX_ITEM_SIZE=8388608
-        ports:
-            - 11211:11211
-        networks:
-            - app-tier
+    
+  
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
 
-    apache:
-        image: httpd:2.4
-        ports:
-            - 80:80
-        volumes:
-            - ./src:/usr/local/apache2/htdocs
-        networks:
-            - app-tier
-            
-    db:
-        container_name: db
-        image: mysql
-        restart: always
-        environment:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: app_db
-            MYSQL_USER: db_user
-            MYSQL_PASSWORD: db_user_pass
-        ports:
-            - 3306:3306
-        #networks:
-        #    - app-tier
+  userdb:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
 
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        container_name: dev_pma
-        links:
-            - db
-        ports:
-            - 8183:80
-        restart: always
-        environment:
-            PMA_HOST: db
-            PMA_PORT: 3306
-            PMA_ARBITRARY: 1
-        networks:
-            - app-tier
-        depends_on:
-            - db
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - php
+    ports:
+      - "4000:4000"
 
-networks:
-    app-tier:
-        driver: bridge
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  
+  memcached:
+    container_name: mymemcached
+    image: memcached:latest
+    ports:
+      - "11211:11211"
+  
+volumes: 
+  mysql-data:

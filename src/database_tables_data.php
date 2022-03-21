@@ -1,10 +1,10 @@
 <?php
-    echo "Hello from group 6 \n";
+    //echo "Hello from group 6 \n";
 
     $mysqli = new mysqli("db", "root", "password");
     //$mysqli = new mysqli("mysql", "root", "password");
 
-    echo "hi";
+    //echo "hi";
     mysqli_options($mysqli, MYSQLI_OPT_LOCAL_INFILE, true);
     $local_infile = 'SET GLOBAL local_infile=1';
 
@@ -13,16 +13,16 @@
     } 
 
     if ($result = $mysqli->query($local_infile)){
-        echo "local file is set \n";
+        //echo "local file is set \n";
     }else{
-        echo $mysqli->error;
+        //echo $mysqli->error;
     }
 
     $sql = "CREATE DATABASE IF NOT EXISTS `database`";
     
     if ($result = $mysqli->query($sql))
     {
-        echo "'database' created successfully \n";
+        //echo "'database' created successfully \n";
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.genres(
@@ -31,9 +31,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table GENRES created successfully \n";
+       // echo "table GENRES created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
 
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/genres.csv'
@@ -44,9 +44,9 @@
             (genres , genresId)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "GENRES data loaded into table \n";
+       // echo "GENRES data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+       // echo "Error loading data: " . $mysqli->error;
     }
 
     
@@ -58,9 +58,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table TAGS created successfully \n";
+       // echo "table TAGS created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
     
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/tags.csv'
@@ -71,9 +71,9 @@
             (userId , movieId, tag, timestamp)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "GENRES data loaded into table \n";
+        //echo "GENRES data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+        //echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.ratings(
@@ -84,9 +84,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table RATINGS created successfully \n";
+       // echo "table RATINGS created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
     
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/ratings_movie.csv'
@@ -97,9 +97,9 @@
             (userId , movieId, rating, timestamp)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "RATINGS data loaded into table \n";
+        //echo "RATINGS data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+       // echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.links(
@@ -109,9 +109,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table LINKS created successfully \n";
+        //echo "table LINKS created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
     
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/links.csv'
@@ -122,9 +122,9 @@
             (movieId, imdbId, tmdbId)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "LINKS data loaded into table \n";
+       // echo "LINKS data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+       // echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.movieId_genreId(
@@ -133,9 +133,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table MOVIE_GENRES_ID created successfully \n";
+       // echo "table MOVIE_GENRES_ID created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
     
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/movieId_genresId.csv'
@@ -146,9 +146,9 @@
             (movieId, genresId)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "MOVIE_GENRES_ID data loaded into table \n";
+      //  echo "MOVIE_GENRES_ID data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+      //  echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.movies(
@@ -159,9 +159,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table MOVIES created successfully \n";
+       // echo "table MOVIES created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
     
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/copy_movie.csv'
@@ -172,9 +172,9 @@
             (movieId, title, year, ratings)";
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "MOVIES data loaded into table \n";
+       // echo "MOVIES data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+       // echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.personality_types(
@@ -191,9 +191,9 @@
     );";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table PERSONALITY TYPES created successfully \n";
+      //  echo "table PERSONALITY TYPES created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+      //  echo "Error creating table: " . $mysqli->error;
     }
 
     $load_data = "LOAD DATA LOCAL INFILE 'Excel/personality_types.csv'
@@ -205,9 +205,9 @@
 
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "PERSONALITY TYPES data loaded into table \n";
+      //  echo "PERSONALITY TYPES data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+      //  echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.personality_ratings(
@@ -222,9 +222,9 @@
     ";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table PERSONALITY RATINGS created successfully \n";
+      //  echo "table PERSONALITY RATINGS created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+      //  echo "Error creating table: " . $mysqli->error;
     }
 
 
@@ -237,9 +237,9 @@
 
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "PERSONALITY RATINGS data loaded into table \n";
+       // echo "PERSONALITY RATINGS data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+        //echo "Error loading data: " . $mysqli->error;
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS database.ratings_hashed(
@@ -253,9 +253,9 @@
     ";
 
     if ($mysqli->query($sql) == TRUE) {
-        echo "table PERSONALITY RATINGS created successfully \n";
+       // echo "table PERSONALITY RATINGS created successfully \n";
     } else {
-        echo "Error creating table: " . $mysqli->error;
+       // echo "Error creating table: " . $mysqli->error;
     }
 
 
@@ -268,10 +268,9 @@
 
 
     if ($mysqli->query($load_data) == TRUE) {
-        echo "PERSONALITY RATINGS data loaded into table \n";
+       // echo "PERSONALITY RATINGS data loaded into table \n";
     } else {
-        echo "Error loading data: " . $mysqli->error;
+      //  echo "Error loading data: " . $mysqli->error;
     }
  
 ?>
-

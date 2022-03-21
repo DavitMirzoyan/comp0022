@@ -1,4 +1,6 @@
 <?php
+    include "Cache.php";
+
     $mysqli = new mysqli("db", "root", "password", "database");
     mysqli_options($mysqli, MYSQLI_OPT_LOCAL_INFILE, true);
     // Check connection
@@ -191,10 +193,11 @@
 
         $final_query = $select_clause . " " . $from_clause . " " . $where_clause . " " . $group_clause . " ". $sort_clause;
 
-        echo $final_query;
+        //echo $final_query;
 
         if($pop_pol !== ""){
-            $result =$mysqli->query($final_query);
+            $result = $mysqli->query($final_query);
+            $returned_result = check_cache($final_query, $result);
 
             echo "<h2>List of films</h2>
                     <table border='1'>
@@ -206,7 +209,31 @@
                     <th>Genres</th>
                     <th>$pop_pol</th>
                 </tr>";
+            
+            for ($i = 0; $i < count($returned_result); $i+=6)  {
+                $id = $returned_result[$i];
+                $name = $returned_result[$i+1];
+                $year = $returned_result[$i+2];
+                $rating = $returned_result[$i+3];
+                $genres = $returned_result[$i+4];
+
+                if (is_null($returned_result[$i+5])){
+                    $vote = 0;
+                }else{
+                    $vote = round($returned_result[$i+5], 2);
+                }
+        
+                echo "<tr>", 
+                "<td> $id </td>", 
+                "<td> <a href=\"web_movie_info.php?id=$id\"> $name </a> </td>",  
+                "<td> $year </td>", 
+                "<td> $rating </td>", 
+                "<td> $genres </td>",
+                "<td> $vote </td>",  
+                "</tr>";
+            }
     
+            /*
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $id = $row['movieId'];
@@ -230,10 +257,10 @@
                     "<td> $vote </td>",  
                     "</tr>";
                 }
-            } else {
-                echo "0";
-            }
-                
+            } #else {
+            #    echo "0";
+            #}
+            */
                     
             echo "</table>
                     <br><br>";
@@ -261,7 +288,9 @@
     function all_movies($sql){
         global $mysqli;
 
-        $result =$mysqli->query($sql);
+        $result = $mysqli->query($sql);        
+        $returned_result = check_cache($sql, $result);
+
 
         echo "<table border='1'>
         <tr>
@@ -271,8 +300,25 @@
         <th>ratings</th>
         <th>genres</th>
         </tr>";
+
+        for ($i = 0; $i < count($returned_result); $i+=5)  {
+            $id = $returned_result[$i];
+            $name = $returned_result[$i+1];
+            $year = $returned_result[$i+2];
+            $rating = $returned_result[$i+3];
+            $genres = $returned_result[$i+4];
+
+            echo "<tr>", 
+            "<td> $id </td>", 
+            "<td> <a href=\"web_movie_info.php?id=$id\"> $name </a> </td>", 
+            "<td> $year </td>",
+            "<td> $rating </td>",
+            "<td> $genres </td>",
+             "</tr>";
+        }
         
-        while($row = $result->fetch_assoc())
+        /*
+        while($row = $returned_result->fetch_assoc())
         {
             $id = $row['movieId'];
             $name = $row["title"];
@@ -286,13 +332,12 @@
                 "<td> $rating </td>",
                 "<td> $genres </td>",
                  "</tr>";
-        
-        }
+        }*/
+
+
         echo "</table>";
     }
 
-    function check_cache($query){
-        global $mysqli;
-    }
+
     
 ?>
