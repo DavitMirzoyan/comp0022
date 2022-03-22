@@ -8,18 +8,20 @@
         $each_film_tags = array();
  
         foreach ($films as $film_name){
-            $get_movieId = "SELECT movieId FROM database.movies WHERE title LIKE BINARY '$film_name '";
-            $id = (int)mysqli_fetch_row($mysqli->query($get_movieId))[0];
+
+            //$get_movieId = "SELECT movieId FROM database.movies WHERE title LIKE BINARY '$film_name '";
+            //$id = (int)mysqli_fetch_row($mysqli->query($get_movieId))[0];
             
-            $find_tag = "SELECT group_concat(DISTINCT tag) as tag FROM database.tags WHERE movieId = $id";
-            $tags = mysqli_fetch_row($mysqli->query($find_tag))[0];
+            //$find_tag = "SELECT group_concat(DISTINCT tag) as tag FROM database.tags WHERE movieId = $id";
+            //$tags = mysqli_fetch_row($mysqli->query($find_tag))[0];
             
-            array_push($copy_array, "'".$id."'");
-            $each_film_tags[$tags] = "";
+            $copy_array[$film_name] = "";
+            array_push($each_film_tags, "'".$film_name."'");
+            //$each_film_tags[$tags] = "";
             //array_push($each_film_tags, "'".$tags."'");
         }
 
-        $films = implode(", ", $copy_array);
+        $films = implode(", ", $each_film_tags);
 
         $joined_tables = "(SELECT tag, 
                                 ratings_hashed.movieId,
@@ -33,9 +35,9 @@
                         FROM database.ratings_hashed 
                         LEFT JOIN database.personality_types 
                         ON ratings_hashed.userId_hashed = personality_types.userId_hashed
-                        LEFT JOIN (SELECT movieId, group_concat(DISTINCT tag) as tag FROM database.tags GROUP BY movieId) as tags
+                        LEFT JOIN database.tags
                         ON tags.movieId = ratings_hashed.movieId
-                        WHERE ratings_hashed.movieId IN ($films) 
+                        WHERE tags.tag IN ($films) 
                         LIMIT 300) as st";
 
         $all_values = "SELECT st.tag, st.movieId,
@@ -49,12 +51,14 @@
         $final_query = $all_values .$joined_tables." WHERE st.rating >= 4";
         $all_ratings = $all_values . $joined_tables;
 
+        //echo $final_query;
         // 5,6,7: high
         // 3,4: medium
         // 1,2: low
 
-
-        foreach($each_film_tags as $tag_key => $given_tag){
+        //print_r($copy_array);
+        foreach($copy_array as $tag_key => $given_tag){
+            //echo $tag_key;
             $map_type = array("openness" => "", 
                           "agreeableness" => "", 
                           "emotional_stability" => "",
@@ -104,10 +108,10 @@
             
             }
 
-            $each_film_tags[$tag_key] = $map_type;
+            $copy_array[$tag_key] = $map_type;
         }
 
-        print_r($each_film_tags);
+        print_r($copy_array);
 
         //print_r($map_type);
 
@@ -144,7 +148,7 @@
                 $extra = $row["extraversion"];
 
                 $user_type_values = array($open, $agree, $emotion, $conc, $extra);
-                $liked = predict($user_type_values, $tag, $each_film_tags);
+                $liked = predict($user_type_values, $tag, $copy_array);
 
                 echo "<tr>", 
                 "<td> $movieId </td>", 

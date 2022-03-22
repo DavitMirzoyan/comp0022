@@ -2,7 +2,7 @@ import pandas as pd
 
 csv_files_folder = "Excel"
 file_to_normalize = "movies.csv"
-'''
+
 file_dir = csv_files_folder+'/'+file_to_normalize
 read_file = pd.read_csv(file_dir)
 
@@ -118,7 +118,7 @@ def each_move_rating(file_dir):
     #print(rating_dict)
     return rating_dict
 
-file_dir = csv_files_folder+'/'+"ratings.csv"
+file_dir = csv_files_folder+'/'+"ratings_movie.csv"
 
 ratings = each_move_rating(file_dir)
 
@@ -131,7 +131,7 @@ def append_rating_to_movie_table(rating_dict, file_dir):
         if cell in rating_dict:
             value = rating_dict[cell]
         else:
-            value = -1
+            value = 0
         read_file.iat[count,4] = value
         count += 1
 
@@ -143,4 +143,3 @@ def append_rating_to_movie_table(rating_dict, file_dir):
 
 file_dir = csv_files_folder+'/'+"copy_movie.csv"
 append_rating_to_movie_table(ratings, file_dir)
-'''

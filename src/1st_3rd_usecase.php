@@ -276,7 +276,7 @@
                                m.title as title, 
                                m.year as year, 
                                m.ratings as ratings, 
-                               group_concat(g.genres) as genres 
+                               group_concat(DISTINCT g.genres) as genres 
                         FROM database.genres as g 
                         JOIN database.movieId_genreId as mg ON mg.genresId = g.genresId 
                         JOIN database.movies as m ON m.movieId = mg.movieId

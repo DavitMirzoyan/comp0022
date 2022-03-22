@@ -24,10 +24,20 @@
     <input type="submit" value="Submit" name="button1">
     <br><br>
 
-    <input type="text" placeholder="Set of Movie Titles" id="tags" name="tags">  
+    <input type="text" placeholder="Tags" id="tags" name="tags">  
     <br><br>
     
     <input type="submit" value="Submit" name="button2">
+    <br><br>
+
+    <input type="text" placeholder="Movie Title" id="movie_name1" name="movie_name1">  
+    <br><br>
+    <input type="submit" value="Submit" name="button3">
+    <br><br>
+
+    <input type="text" placeholder="Movie Title" id="movie_name2" name="movie_name2">  
+    <br><br>
+    <input type="submit" value="Submit" name="button4">
     <br><br>
     
     <?php
@@ -36,6 +46,12 @@
         }
         else if(array_key_exists('button2', $_POST)) {
           include '6th_usecase.php';
+        }
+        else if (array_key_exists('button3', $_POST)){
+          include '4th_usecase.php';
+        }
+        else if (array_key_exists('button4', $_POST)){
+          include '5th_usecase_dian.php';
         }
     ?>
     

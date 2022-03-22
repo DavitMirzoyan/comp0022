@@ -79,6 +79,7 @@
 
                     $result = $mysqli->query($query);
                     
+                    /*
                     echo "<h2>Each Type Amount </h2>
                     <table border='1'>
                         <tr>
@@ -87,7 +88,7 @@
                         <th>total_appeared</th>
                     </tr>
                     ";
-
+                    */
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             
@@ -97,17 +98,19 @@
 
                             array_push($got_values, $given_type_value);
                             
+                            /*
                             echo 
                             "<tr>", 
                                 "<td align='center'>" .$rating. "</td>",
                                 "<td align='center'>" .$given_type_value. "</td>", 
                                 "<td align='center'>" .$total. "</td>",
                             "</tr>";
+                            */
                         }
                     }
         
-                    echo "</table>
-                    <br><br>";
+                    //echo "</table>
+                    //<br><br>";
 
                     $map_type[$type] = $got_values;
                     
